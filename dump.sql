@@ -18,7 +18,8 @@ CREATE TABLE user_role (
 
 INSERT INTO user_role (name) VALUES 
 ('Admin'),
-('User');
+('User'),
+('Ban');
 
 CREATE TABLE users (
     id BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
@@ -46,7 +47,7 @@ CREATE TABLE car (
     image TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE category (
@@ -68,7 +69,7 @@ INSERT INTO category (name) VALUES
 
 CREATE TABLE post (
     id BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
-    user_id BIGINT(20) NOT NULL,
+    user_id BIGINT(20),
     title VARCHAR(128) NOT NULL,
     description TEXT NOT NULL,
     car_brand VARCHAR(128),
@@ -79,7 +80,7 @@ CREATE TABLE post (
     category_id INT DEFAULT 10,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (category_id) REFERENCES category(id)
 );
 
@@ -87,12 +88,12 @@ CREATE TABLE comment (
     id BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     description TEXT NOT NULL,
     solution TINYINT NOT NULL,
-    user_id BIGINT(20) NOT NULL,
+    user_id BIGINT(20),
     post_id BIGINT(20) NOT NULL,
     parent_id INT DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE
 );
 
